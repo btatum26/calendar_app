@@ -1,23 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useEffect, useState } from 'react'
+import TodoList from './components/TodoList.js';
+import axios from 'axios'
+
 
 function App() {
+
+  const [assignments, setAssignments] = useState([])
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/api/courses/196109/assignments?per_page=50').then(res => {
+      setAssignments(res.data)
+      console.log(res.data)
+    })
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>This will be a menue bar</div>
+      <TodoList assignments={assignments}/>
+      <div className='assignment-viewer'>this will display assignment information</div>
     </div>
   );
 }
