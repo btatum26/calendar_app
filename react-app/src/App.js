@@ -1,25 +1,80 @@
 import './App.css';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import TodoList from './components/TodoList.js';
+import ChatBox from './components/ChatBox.js'
 import axios from 'axios'
+import DOMParserReact from 'dom-parser-react'
 
 
 function App() {
 
-  const [assignments, setAssignments] = useState([])
+  const [assignments, setAssignments] = useState([])  
+  const [assignment, setAssignment] = useState(null)
+  const [isResizing, setIsResizing] = useState(false)
+  const [width, setWidth] = useState(0)
 
+  // gets the assignements from canvas
   useEffect(() => {
-    axios.get('http://localhost:3000/api/courses/196109/assignments?per_page=50').then(res => {
+    axios.get('http://localhost:3000/api/courses/200091/assignments?per_page=50').then(res => {
       setAssignments(res.data)
       console.log(res.data)
     })
   }, [])
+  
+  // refrence to the resizer
+  const ref = useRef(null);
+  
+  // sets the width of the sidebar
+  function resize(e) {
+    if (isResizing) {
+      setWidth(window.innerWidth - e.clientX)
+    }
+  }
+  
+  // starts resizing
+  function startResizing() {
+    setIsResizing(true)
+  }
+  
+  // stop resizing
+  function stopResizing(e) {
+    setIsResizing(false)
+  }
+
+  function handleSetAssignment(assignment) {
+    setAssignment(assignment)
+  }
+
+function DELETEME() {
+  if(assignment !== null) {
+    return(<>
+      <div>Name: {assignment.name}</div>
+      <div>Id: {assignment.id}</div>
+      <div>Due Date: {assignment.due_at}</div>
+      <div>
+        <div>Description:</div>
+        <DOMParserReact source={assignment.description} />
+      </div>
+    </>)
+  }
+}
 
   return (
-    <div className="App">
-      <div>This will be a menue bar</div>
-      <TodoList assignments={assignments}/>
-      <div className='assignment-viewer'>this will display assignment information</div>
+    <div className="App" onMouseUp={stopResizing} onMouseMove={resize}>
+      <div>This will be a menu bar</div>
+      <TodoList assignments={assignments} handleSetAssignment={handleSetAssignment}/>
+      <div className="assignment-viewer">
+            <div className='resizer'
+                onMouseDown={startResizing}
+                onMouseUp={stopResizing}>
+            </div>
+            <div className='assignment-info'
+                style={{ width: width }}
+                ref={ref}>
+                  {DELETEME()}
+                  <ChatBox assignment={assignment}/>
+            </div>
+        </div>
     </div>
   );
 }

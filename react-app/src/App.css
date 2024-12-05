@@ -1,6 +1,37 @@
 .App {
-  width: 100vw;
+  width: 100%S;
   height: 100vh;
   display: flex;
+}
 
+.assignment-viewer {
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  border-right: #e9e9e9 1px solid;
+  flex-direction: row;
+  background: #ffffff;
+  box-shadow: -8px 2px 22px -7px rgba(0, 0, 0, 0.25);
+  border-radius: 10px 0px 0px 10px;
+  z-index: 2;
+}
+
+.assignment-info {
+  min-width: 200px;
+  max-width: min(1000px, 50vw);
+  background: #ffffff;
+}
+
+.resizer {
+  width: 3px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 6px;
+  justify-self: flex-end;
+  cursor: col-resize;
+  resize: horizontal;
+}
+
+.resizer:hover {
+  background: #c1c3c5b4;
 }
