@@ -1,20 +1,24 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 
+import "./ChatBox.css"
 
 function ChatBox(props) {
 
+    const prompt = "I will present you with an assignment description, give me a time estimation of how "
+        + "long the assignment will take. I want an upper bound, a lower bound, and the units of time req"
+        + "uired to complete the assignment give me the responce in json format that contains two integer"
+        + " attributes: high and low and one attribut that has a unit of time: units. Follow the template"
+        + " {\"high\": ,\"low\": ,\"units\": } Do not write anything except for the JSON Do not complete "
+        + "the assignment."
+
     useEffect(() => {
-        handleSetMessage("loading...")
-        updateTimeEstimation()
-        setConversation([])
+        setMessage("loading...")
+        setEstimations([])
     }, [props.assignment])
 
     const [message, setMessage] = useState("")
-    const [conversation, setConversation] = useState([])
-    const [chatRequest, setChatRequest] = useState("")
-    const [chatResponce, setChatResponce] = useState("")
-    const [hasEstimation, setHasEstimation] = useState(false)
+    const [estimations, setEstimations] = useState([])
 
     const handler = axios.create({
         responseType: 'stream',
@@ -24,12 +28,23 @@ function ChatBox(props) {
     // this function will update the time estimation of the current assignment description
     // this will be affected by any dialog that happens with the user
     function updateTimeEstimation() {
-        const messages = conversation
-        console.log(conversation)
+        const parser = new DOMParser()
+        const descriptionText = parser.parseFromString(props.assignment.description, "text/html").body.textContent
+        const messages = [{ 
+                "role": "system",
+                "content": prompt
+        }]
+        estimations.forEach((item) => {
+            messages.push(item)
+        })
+        messages.push({
+                "role": "user",
+                "content": descriptionText
+        })
+        console.log(messages)
+
         if (props.assignment !== null) {
-            handleSetMessage("loading...")
-            setChatResponce("Please let the time estimation complete before asking for recomendations")
-            messages.push({ "role": "user", "content": "Give me a time estimation of how long the following assignment. the beginning of the assignment will be marked with \"--PROMPT START\" and the end will be marked with \"--PROMT END\" respond only with a number range and a unit. \n--PROMPT START\n" + props.assignment.description + "--PROMPT END"})
+            setMessage("loading...")
             handler.post('/chat',
                 {
                     "model": "llama3.2",
@@ -39,59 +54,36 @@ function ChatBox(props) {
             ).then(res => {
                 messages.push(JSON.parse(res.data).message)
                 setMessage(JSON.parse(res.data).message.content)
-                setChatRequest("ask the model anything")
-                setChatResponce("")          
-                setHasEstimation(true)
             })
         } else {
-            handleSetMessage("No assignment selected")
-            setHasEstimation(false)
+            setMessage("No assignment selected")
         }
-        console.log(messages)
-        setConversation(messages)
     }
 
-    function queryModel() {
-        const messages = conversation
-        console.log(conversation)
-        if (props.assignment == null) {
-            handleSetMessage("No assignment selected") 
-            setChatResponce("No assignment selected")           
-        } else if (!hasEstimation) {
-            setChatResponce("Please let the time estimation complete before asking for recomendations")          
-        } else {
-            setChatResponce("loading...")
-            messages.push({role: 'user', content: chatRequest})
-            handler.post('/chat',
-                {
-                    "model": "llama3.2",
-                    "stream": false,
-                    "messages": messages
-                },
-            ).then(res => {
-                messages.push(JSON.parse(res.data).message)
-                setChatResponce(JSON.parse(res.data).message.content)
-            })
-        }
-        console.log(messages)
-        setConversation(messages)
+    function lowerEstimation() {
+        const newEstimations = JSON.parse(JSON.stringify(estimations))
+        newEstimations.push({
+            "role": "user",
+            "content": "The estimation of: " + message + " is too high for this assignment please return a lower estimation"
+        })
+        setEstimations(newEstimations)
     }
 
-    function handleSetMessage(message) {
-        setMessage(message)
-    }
-
-    function handleSetChatRequest(e) {
-        setChatRequest(e.target.value)
+    function raiseEstimation() {
+        const newEstimations = JSON.parse(JSON.stringify(estimations))
+        newEstimations.push({
+            "role": "user",
+            "content": "The estimation of: " + message + " is too low for this assignment please return a higher estimation"
+        })
+        setEstimations(newEstimations)
     }
 
     return (
     <div className='chatbox-container'>
         <button onClick={updateTimeEstimation}>Generate Time estimation</button>
         <div>Time to complete assignment: {message}</div>
-        <input className='chat-input' onChange={handleSetChatRequest}></input>
-        <button onClick={queryModel}>Ask the Model!</button>
-        <div>{chatResponce}</div>
+        <button onClick={lowerEstimation}>Estimation Too High</button>
+        <button onClick={raiseEstimation}>Estimation Too Low</button>
     </div>)
     
 }
