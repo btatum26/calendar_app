@@ -6,12 +6,13 @@ name: Calendar App
 on:
   push:
     branches: [ "main" ]
+    paths: ./client
   pull_request:
     branches: [ "main" ]
+    paths: ./client
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,7 +21,6 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - run: cd ./client
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
