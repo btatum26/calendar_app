@@ -2,6 +2,7 @@ import './App.css';
 import React, { useEffect, useState, useRef } from 'react'
 import TodoList from './components/TodoList.js';
 import ChatBox from './components/ChatBox.js'
+import TimeEstimator from './components/TimeEstimator.js';
 import Sidebar from './components/Sidebar.js'
 import axios from 'axios'
 import DOMParserReact from 'dom-parser-react'
@@ -99,6 +100,7 @@ function App() {
                 ref={ref}>
                   {DELETEME()}
                   <ChatBox assignment={assignment}/>
+                  <TimeEstimator assignment={assignment}/>
             </div>
         </div>
     </div>

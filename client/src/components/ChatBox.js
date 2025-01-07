@@ -49,7 +49,26 @@ function ChatBox(props) {
                 {
                     "model": "llama3.2",
                     "stream": false,
-                    "messages": messages
+                    "messages": messages,
+                    "format": {
+                        "type": "object",
+                        "properties": {
+                            "high": {
+                                "type": "integer"
+                            },
+                            "low": {
+                                "type": "integer"
+                            },
+                            "units": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "high",
+                            "low",
+                            "units"
+                        ]
+                    }
                 },
             ).then(res => {
                 messages.push(JSON.parse(res.data).message)
