@@ -25,7 +25,7 @@ function ChatBox(props) {
         baseURL: 'http://localhost:11434/api'
     })
 
-    // this is to ubdate pages
+    // this is to ubdate pages 2
 
     // this function will update the time estimation of the current assignment description
     // this will be affected by any dialog that happens with the user
