@@ -11,11 +11,13 @@ import DOMParserReact from 'dom-parser-react'
 function App() {
 
   const [assignments, setAssignments] = useState([])  
-  //const [courses, setCourses] = useState([])
+  const [courses, setCourses] = useState([])
   const [assignment, setAssignment] = useState(null)
   const [course, setCourse] = useState(null)
   const [isResizing, setIsResizing] = useState(false)
   const [width, setWidth] = useState(0)
+
+  setCourses([])
 
   // gets the assignements from canvas
   useEffect(() => {
