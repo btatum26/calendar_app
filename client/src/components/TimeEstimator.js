@@ -34,7 +34,7 @@ function TimeEstimator(props) {
     
     useEffect(() => {
         updateTimeEstimation()
-    }, [props.assignment])
+    }, [props.assignment, updateTimeEstimation])
     
     const [message, setMessage] = useState("")
     const [estimation, setEstimation] = useState({})

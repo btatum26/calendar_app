@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import TodoList from './components/TodoList.js';
 import ChatBox from './components/ChatBox.js'
 import TimeEstimator from './components/TimeEstimator.js';
-import Sidebar from './components/Sidebar.js'
+//import Sidebar from './components/Sidebar.js'
 import axios from 'axios'
 import DOMParserReact from 'dom-parser-react'
 
@@ -11,7 +11,7 @@ import DOMParserReact from 'dom-parser-react'
 function App() {
 
   const [assignments, setAssignments] = useState([])  
-  const [courses, setCourses] = useState([])
+  //const [courses, setCourses] = useState([])
   const [assignment, setAssignment] = useState(null)
   const [course, setCourse] = useState(null)
   const [isResizing, setIsResizing] = useState(false)
