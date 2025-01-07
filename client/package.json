@@ -1,6 +1,7 @@
 {
   "name": "react-app",
   "version": "0.1.0",
+  "homepage": "https://btatum26.github.io/calendar-appp",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
