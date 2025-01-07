@@ -7,11 +7,13 @@ on:
   push:
     branches: [ "main" ]
     paths: 
-      - ./client/**
+      - './client/**'
+      - '.github/workflows/**'
   pull_request:
     branches: [ "main" ]
     paths: 
-      - ./client/**
+      - './client/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
