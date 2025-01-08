@@ -47,7 +47,7 @@ function TimeEstimator(props) {
     
     // this function will update the time estimation of the current assignment description
     // this will be affected by any dialog that happens with the user
-    const updateTimeEstimation = useCallback(() => {
+    const updateTimeEstimation = () => {
         const parser = new DOMParser()
         const descriptionText = parser.parseFromString(props.assignment.description, "text/html").body.textContent
 
@@ -82,7 +82,7 @@ function TimeEstimator(props) {
                 high: ""
             })
         }
-    })
+    }
     
     function lowerEstimation() {
         const newHistory = JSON.parse(JSON.stringify(history))
