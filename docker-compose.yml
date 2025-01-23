@@ -1,0 +1,19 @@
+services:
+  react-app:
+    image: react-app
+    stdin_open: true
+    ports:
+      - 8000:8000
+    networks:
+      - Calendar-App
+
+  api-server:
+      image: api-server
+      ports:
+        - 3000:3000
+      networks:
+        - Calendar-App
+
+networks:
+  Calendar-App:
+    driver: bridge

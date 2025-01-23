@@ -6,11 +6,8 @@ import "./ChatBox.css"
 function ChatBox(props) {
 
     const prompt = "I will present you with an assignment description, give me a time estimation of how "
-        + "long the assignment will take. I want an upper bound, a lower bound, and the units of time req"
-        + "uired to complete the assignment give me the responce in json format that contains two integer"
-        + " attributes: high and low and one attribut that has a unit of time: units. Follow the template"
-        + " {\"high\": ,\"low\": ,\"units\": } Do not write anything except for the JSON Do not complete "
-        + "the assignment."
+        + "long the assignment will take. I want a high time estimation, a low time estimation, and the units of time req"
+        + "uired to complete the assignment"
 
     useEffect(() => {
         setMessage("loading...")
@@ -22,7 +19,7 @@ function ChatBox(props) {
 
     const handler = axios.create({
         responseType: 'stream',
-        baseURL: 'http://localhost:11434/api'
+        baseURL: 'http://5.161.210.88:11434/api'
     })
 
     // this function will update the time estimation of the current assignment description
@@ -47,9 +44,29 @@ function ChatBox(props) {
             setMessage("loading...")
             handler.post('/chat',
                 {
-                    "model": "llama3.2",
+                    "model": "tinyllama",
                     "stream": false,
-                    "messages": messages
+                    "messages": messages,
+                    "format": {
+                        "type": "object",
+                        "properties": {
+                            "high": {
+                                "type": "integer"
+                            },
+                            "low": {
+                                "type": "integer"
+                            },
+                            "units": {
+                                type: "string",
+                                enum: ["minutes", "hours", "days"]
+                            }
+                        },
+                        "required": [
+                            "high",
+                            "low",
+                            "units"
+                        ]
+                    }
                 },
             ).then(res => {
                 messages.push(JSON.parse(res.data).message)
