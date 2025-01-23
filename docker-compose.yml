@@ -2,6 +2,8 @@ services:
   react-app:
     image: react-app
     stdin_open: true
+    environment:
+      - PORT=8000
     ports:
       - 8000:8000
     networks:

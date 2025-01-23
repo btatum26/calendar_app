@@ -6,7 +6,6 @@ const api = axios.create({
     baseURL: URL,
     headers: {
         "Accept": "application/json",
-        "Authorization": "Bearer 4511~hcUFDXvxBCtxPBcAz4nQ9UunDYPNv38WreUPQ23f9M3XJaeG7WZuzFHZFA7VmTzL"
     }
 });
 
